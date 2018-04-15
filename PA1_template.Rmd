@@ -8,10 +8,35 @@ output:
 
 ## Loading and preprocessing the data
 
+Working directory set to correct folder
+Load data and read file 
 
+```{r Loading data}
+library(dplyr)
+library(ggplot2)
+activity <- read.csv("activity.csv")
+str(activity)
+summary(activity)
+head(activity)
+```
+
+Process data into suitable format for analysis
+We need to remove missing values. Create another dataset without missing values
+
+```{r Formatiing data}
+act.complete <- na.omit(activity)
+```
 
 ## What is mean total number of steps taken per day?
 
+For this part of the assignment, you can ignore the missing values in the dataset.
+1.Calculate the total number of steps taken per day
+
+```{r stepsperday}
+  act.day <- group_by(act.complete,date)
+  act.day <- summarize(act.day,steps = sum(steps))
+  summary(act.day)
+```  
 
 
 ## What is the average daily activity pattern?
