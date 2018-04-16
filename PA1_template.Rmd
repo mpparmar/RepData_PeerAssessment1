@@ -36,11 +36,34 @@ For this part of the assignment, you can ignore the missing values in the datase
   act.day <- group_by(act.complete,date)
   act.day <- summarize(act.day,steps = sum(steps))
   summary(act.day)
-```  
+```
+2.If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
+
+```{r plot graph}
+  qplot(steps,data = act.day)
+```
+
+3.Calculate and report the mean and median of the total number of steps taken per day
+Use mean() and median() function
+```{r mean_median}
+  mean(act.day$steps)
+  median(act.day$steps)
+```
 
 
 ## What is the average daily activity pattern?
 
+  1.Make a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken,        averaged across all days (y-axis)
+
+```{r avgDailyAct}
+  act.int <- group_by(act.complete,interval)
+  act.int <- summarize(act.int,steps = mean(steps))
+```
+
+Plot avg. daily steps vs intervals
+```{r avgDailyAct_plot}
+  ggplot(act.int, aes(interval, steps)) + geom_line()
+```
 
 
 ## Imputing missing values
