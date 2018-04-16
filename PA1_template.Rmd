@@ -65,9 +65,45 @@ Plot avg. daily steps vs intervals
   ggplot(act.int, aes(interval, steps)) + geom_line()
 ```
 
+  2.Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+```{r maxStepsinterval}
+  act.int[act.int$steps==max(act.int$steps),]
+```
+
 
 ## Imputing missing values
 
+Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+
+1.Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+The total number of rows with NAs is equal to the difference between the number of rows in the raw data and the number of rows in the data with only complete cases:
+
+```{r TotNA}
+  nrow(activity)-nrow(act.complete)
+```
+
+2.Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+```{r fillNA}
+  names(act.int)[2] <- "mean.steps"
+  act.impute <- merge(activity, act.int)
+```
+
+3.Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+If steps is NA, I replace the value with the mean number of steps for the interval:
+
+```{r stepsNA}
+  act.impute$steps[is.na(act.impute$steps)] <- act.impute$mean.steps[is.na(act.impute$steps)]
+```
+
+4.Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+```{r PlotHist}
+  act.day.imp <- group_by(act.impute, date)
+  act.day.imp <- summarize(act.day.imp, steps=sum(steps))
+  qplot(steps, data=act.day.imp)
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
